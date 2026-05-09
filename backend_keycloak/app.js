@@ -1,71 +1,58 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import express from "express";
-
-//database
+import express from 'express';
 import mongoose from 'mongoose';
 import { connectDB } from './config/mongoConn.js';
-
-//importing middlewares
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import morgan from 'morgan';
 import { attachUserId } from './Middleware/attachUserId.js';
-
-
-// Keycloak
 import session from 'express-session';
 import { keycloak, memoryStore } from './config/keycloak.js';
 
+// Routes
+import homeRoute       from './routers/homeRoute.js';
+import predictionRoute from './routers/predictionRoute.js';
+import statsRoute      from './routers/statsRoute.js';
+import usersRoute      from './routers/usersRoute.js';
+import auditRoute      from './routers/auditRoute.js';
 
-//importing protected routes
-import homeRoute from './routers/homeRoute.js';
-
-
-// Connect to Database
 connectDB();
 
-const app = express();
-const PORT = process.env.PORT ;
+const app  = express();
+const PORT = process.env.PORT || 5000;
 
-app.use(cors({ origin: 'http://localhost:5173', credentials: true, }));  // My front-end
+app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173', credentials: true }));
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(morgan('dev'));
 
 // Session for Keycloak
-app.use(
-  session({
-    secret: 'some-secret',
-    resave: false,
-    saveUninitialized: true,
-    store: memoryStore,
-  })
-);
-// Keycloak middleware
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'lumiqualityai-secret',
+  resave: false,
+  saveUninitialized: true,
+  store: memoryStore,
+}));
 app.use(keycloak.middleware());
 
-
-
-//_______________________________________________________________
-
-// Protect all routes below this line and attach userId
+// All routes below require a valid Keycloak Bearer token
 app.use(keycloak.protect(), attachUserId);
-// routes
-app.use('/api/home' , homeRoute);
-//app.use('/api/orders/admin', keycloak.protect('realm:admin'), adminOrderRoute);
 
+app.use('/api', predictionRoute);
+app.use('/api', statsRoute);
+app.use('/api', usersRoute);
+app.use('/api', auditRoute);
+app.use('/api/home', homeRoute);
 
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Erreur serveur interne.' });
+});
 
-
-
-
-
-
-// Assure connection ti DB before listenning
 mongoose.connection.once('open', () => {
-  console.log('Connected to database')
-
-  app.listen(PORT,()=>{
-    console.log(`Server running on port ${PORT}....`);
-  });
-})
+  console.log('MongoDB connecté');
+  app.listen(PORT, () => console.log(`Serveur démarré sur le port ${PORT}`));
+});
