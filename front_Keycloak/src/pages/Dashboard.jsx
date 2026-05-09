@@ -11,6 +11,7 @@ import {
   MdCheckCircle, MdWarning, MdTrendingUp, MdBarChart,
   MdFactory, MdRefresh,
 } from 'react-icons/md';
+import { Spinner } from '../components/Spinner';
 
 const CLASS_COLORS = {
   Rebut: '#ef4444', Acceptable: '#f97316', Cible: '#22c55e', Inefficient: '#eab308',
@@ -61,7 +62,9 @@ export const Dashboard = () => {
 
   if (loading) return (
     <Layout title="Tableau de bord">
-      <div className="flex items-center justify-center h-64 text-slate-400 text-sm">Chargement…</div>
+      <div className="flex items-center justify-center h-64">
+        <Spinner size="md" label="Chargement des statistiques…" />
+      </div>
     </Layout>
   );
 

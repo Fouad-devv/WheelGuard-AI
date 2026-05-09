@@ -3,6 +3,7 @@ import useAxiosPrivate from '../api/useAxiosPrivate';
 import { postPredictBatch } from '../api/predictionApi';
 import { Layout } from '../components/Layout';
 import { MdUploadFile, MdDownload, MdClose } from 'react-icons/md';
+import { Spinner } from '../components/Spinner';
 
 const CLASS_BADGE = {
   Rebut:       'bg-red-100 text-red-700',
@@ -127,7 +128,7 @@ export const BatchPrediction = () => {
             className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300
                        text-white font-medium px-6 py-3 rounded-xl transition-colors text-sm shadow-sm shadow-blue-200"
           >
-            {loading ? '⏳ Traitement en cours…' : '▶ Lancer la prédiction'}
+            {loading ? <><Spinner size="sm" /><span>Traitement en cours…</span></> : '▶ Lancer la prédiction'}
           </button>
           {result && (
             <button

@@ -4,6 +4,7 @@ import { getHistory, getAllPredictions } from '../api/predictionApi';
 import { useRole } from '../hooks/useRole';
 import { Layout } from '../components/Layout';
 import { MdDownload, MdClose, MdInfo, MdFilterList, MdChevronRight } from 'react-icons/md';
+import { Spinner } from '../components/Spinner';
 
 const CLASS_BADGE = {
   Rebut:       'bg-red-100 text-red-700',
@@ -158,7 +159,7 @@ export const History = () => {
       {/* ── MOBILE: card list ── */}
       <div className="block md:hidden space-y-2 mb-4">
         {loading ? (
-          <div className="bg-white rounded-2xl p-8 text-center text-slate-400 text-sm">Chargement…</div>
+          <div className="bg-white rounded-2xl p-10 flex justify-center"><Spinner size="md" label="Chargement…" /></div>
         ) : data.predictions.length === 0 ? (
           <div className="bg-white rounded-2xl p-8 text-center text-slate-400 text-sm">Aucune prédiction trouvée.</div>
         ) : data.predictions.map(p => (
@@ -214,7 +215,7 @@ export const History = () => {
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={7} className="text-center py-12 text-slate-400">Chargement…</td></tr>
+                <tr><td colSpan={7} className="py-12"><div className="flex justify-center"><Spinner size="md" /></div></td></tr>
               ) : data.predictions.length === 0 ? (
                 <tr><td colSpan={7} className="text-center py-12 text-slate-400">Aucune prédiction trouvée.</td></tr>
               ) : data.predictions.map(p => (

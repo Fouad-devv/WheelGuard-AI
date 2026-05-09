@@ -3,6 +3,7 @@ import useAxiosPrivate from '../../api/useAxiosPrivate';
 import { getAuditLogs } from '../../api/statsApi';
 import { Layout } from '../../components/Layout';
 import { MdRefresh, MdFilterList, MdClose } from 'react-icons/md';
+import { Spinner } from '../../components/Spinner';
 
 const ACTION_BADGE = {
   CREATE:         'bg-green-100 text-green-700',
@@ -110,7 +111,7 @@ export const AuditLogs = () => {
       {/* ── MOBILE: card list ── */}
       <div className="block sm:hidden space-y-2 mb-4">
         {loading ? (
-          <div className="bg-white rounded-2xl p-8 text-center text-slate-400 text-sm">Chargement…</div>
+          <div className="bg-white rounded-2xl p-10 flex justify-center"><Spinner size="md" label="Chargement…" /></div>
         ) : data.logs.length === 0 ? (
           <div className="bg-white rounded-2xl p-8 text-center text-slate-400 text-sm">Aucune entrée.</div>
         ) : data.logs.map(log => (
@@ -149,7 +150,7 @@ export const AuditLogs = () => {
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={6} className="text-center py-12 text-slate-400">Chargement…</td></tr>
+                <tr><td colSpan={6} className="py-12"><div className="flex justify-center"><Spinner size="md" /></div></td></tr>
               ) : data.logs.length === 0 ? (
                 <tr><td colSpan={6} className="text-center py-12 text-slate-400">Aucune entrée.</td></tr>
               ) : data.logs.map(log => (

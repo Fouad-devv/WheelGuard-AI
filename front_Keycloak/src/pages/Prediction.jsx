@@ -3,6 +3,7 @@ import useAxiosPrivate from '../api/useAxiosPrivate';
 import { postPredict } from '../api/predictionApi';
 import { Layout } from '../components/Layout';
 import { MdBolt, MdCheckCircle, MdWarning, MdInfo, MdError, MdRestartAlt } from 'react-icons/md';
+import { Spinner } from '../components/Spinner';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
 const FIELDS = [
@@ -171,8 +172,7 @@ export const Prediction = () => {
               className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300
                          text-white font-medium px-6 py-3 rounded-xl transition-colors text-sm shadow-sm shadow-blue-200"
             >
-              <MdBolt className="text-base" />
-              {loading ? 'Calcul en cours…' : 'Lancer la prédiction'}
+              {loading ? <><Spinner size="sm" /><span>Calcul en cours…</span></> : <><MdBolt className="text-base" /><span>Lancer la prédiction</span></>}
             </button>
             <button
               type="button"

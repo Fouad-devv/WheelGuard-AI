@@ -4,6 +4,7 @@ import { useRole } from './hooks/useRole';
 
 // Components
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { PageLoader } from './components/Spinner';
 
 // Pages
 import { Public }          from './pages/public/public';
@@ -23,13 +24,7 @@ const AdminRoute = ({ children }) => {
 function App() {
   const { keycloak, initialized } = useKeycloak();
 
-  if (!initialized) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-50">
-        <div className="text-slate-500 text-sm">Initialisation…</div>
-      </div>
-    );
-  }
+  if (!initialized) return <PageLoader />;
 
   return (
     <Routes>

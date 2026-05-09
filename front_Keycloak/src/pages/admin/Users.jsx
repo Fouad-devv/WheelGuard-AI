@@ -3,6 +3,7 @@ import useAxiosPrivate from '../../api/useAxiosPrivate';
 import { getUsers, deleteUser, resetPassword } from '../../api/statsApi';
 import { Layout } from '../../components/Layout';
 import { MdPeople, MdDelete, MdLockReset, MdClose, MdRefresh, MdPerson } from 'react-icons/md';
+import { Spinner } from '../../components/Spinner';
 
 const ROLE_BADGE = {
   admin:    'bg-red-100 text-red-700',
@@ -88,8 +89,8 @@ export const Users = () => {
       )}
 
       {loading ? (
-        <div className="bg-white rounded-2xl p-10 text-center text-slate-400 text-sm shadow-sm border border-slate-200">
-          Chargement…
+        <div className="bg-white rounded-2xl p-12 flex justify-center shadow-sm border border-slate-200">
+          <Spinner size="md" label="Chargement des utilisateurs…" />
         </div>
       ) : users.length === 0 ? (
         <div className="bg-white rounded-2xl p-10 text-center text-slate-400 text-sm shadow-sm border border-slate-200">
