@@ -75,6 +75,69 @@ export const deleteUser = async (req, res) => {
   }
 };
 
+// POST /api/users
+export const createUser = async (req, res) => {
+  const { username, email, firstName, lastName, password, role } = req.body;
+  if (!username || !password)
+    return res.status(400).json({ error: 'Nom d\'utilisateur et mot de passe requis.' });
+
+  try {
+    const token = await getAdminToken();
+
+    // 1 — Create the user
+    const createResp = await axios.post(
+      `${KC_URL}/admin/realms/${KC_REALM}/users`,
+      {
+        username,
+        email:         email      || undefined,
+        firstName:     firstName  || undefined,
+        lastName:      lastName   || undefined,
+        enabled:       true,
+        emailVerified: true,
+      },
+      { headers: adminHeaders(token) }
+    );
+
+    // Keycloak returns the new user ID in the Location header
+    const location = createResp.headers['location'] || '';
+    const newUserId = location.split('/').pop();
+
+    // 2 — Set password
+    await axios.put(
+      `${KC_URL}/admin/realms/${KC_REALM}/users/${newUserId}/reset-password`,
+      { type: 'password', value: password, temporary: false },
+      { headers: adminHeaders(token) }
+    );
+
+    // 3 — Assign role
+    if (role && ['operator', 'manager', 'admin'].includes(role)) {
+      const { data: roleData } = await axios.get(
+        `${KC_URL}/admin/realms/${KC_REALM}/roles/${role}`,
+        { headers: adminHeaders(token) }
+      );
+      await axios.post(
+        `${KC_URL}/admin/realms/${KC_REALM}/users/${newUserId}/role-mappings/realm`,
+        [{ id: roleData.id, name: roleData.name }],
+        { headers: adminHeaders(token) }
+      );
+    }
+
+    AuditLog.create({
+      userId: req.userId, username: req.username,
+      action: 'CREATE_USER', resource: 'user',
+      details: { newUsername: username, role },
+      ipAddress: req.ip,
+    }).catch(() => {});
+
+    return res.status(201).json({ message: `Utilisateur ${username} créé avec succès.` });
+  } catch (err) {
+    if (err.response?.status === 409)
+      return res.status(409).json({ error: 'Ce nom d\'utilisateur existe déjà.' });
+    console.error('createUser error:', err.response?.data || err.message);
+    return res.status(500).json({ error: 'Impossible de créer l\'utilisateur.' });
+  }
+};
+
 // PUT /api/users/:id/reset-password
 export const resetPassword = async (req, res) => {
   const { newPassword } = req.body;

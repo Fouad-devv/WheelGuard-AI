@@ -7,6 +7,9 @@ export const getGlobalStats = (axios) =>
 export const getUsers = (axios) =>
   axios.get('/api/users');
 
+export const createUser = (axios, payload) =>
+  axios.post('/api/users', payload);
+
 export const deleteUser = (axios, id) =>
   axios.delete(`/api/users/${id}`);
 
