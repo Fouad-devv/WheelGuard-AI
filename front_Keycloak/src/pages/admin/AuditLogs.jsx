@@ -144,15 +144,13 @@ export const AuditLogs = () => {
                 <th className="text-left px-4 py-3 text-slate-500 font-medium">Utilisateur</th>
                 <th className="text-left px-4 py-3 text-slate-500 font-medium">Action</th>
                 <th className="text-left px-4 py-3 text-slate-500 font-medium">Ressource</th>
-                <th className="text-left px-4 py-3 text-slate-500 font-medium">IP</th>
-                <th className="text-left px-4 py-3 text-slate-500 font-medium">Détails</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={6} className="py-12"><div className="flex justify-center"><Spinner size="md" /></div></td></tr>
+                <tr><td colSpan={4} className="py-12"><div className="flex justify-center"><Spinner size="md" /></div></td></tr>
               ) : data.logs.length === 0 ? (
-                <tr><td colSpan={6} className="text-center py-12 text-slate-400">Aucune entrée.</td></tr>
+                <tr><td colSpan={4} className="text-center py-12 text-slate-400">Aucune entrée.</td></tr>
               ) : data.logs.map(log => (
                 <tr key={log._id} className="border-b border-slate-50 hover:bg-slate-50 transition-colors">
                   <td className="px-4 py-3 text-slate-500 whitespace-nowrap text-xs">{fmtDate(log.timestamp)}</td>
@@ -163,10 +161,6 @@ export const AuditLogs = () => {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-slate-600">{log.resource}</td>
-                  <td className="px-4 py-3 text-slate-500 text-xs">{log.ipAddress}</td>
-                  <td className="px-4 py-3 text-slate-400 text-xs max-w-[200px] truncate">
-                    {JSON.stringify(log.details)}
-                  </td>
                 </tr>
               ))}
             </tbody>
