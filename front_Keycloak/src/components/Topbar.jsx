@@ -1,40 +1,18 @@
-import { useKeycloak } from '@react-keycloak/web';
-import { useRole } from '../hooks/useRole';
-import { MdLogout, MdPerson } from 'react-icons/md';
-
-const ROLE_LABELS = { admin: 'Administrateur', manager: 'Manager', operator: 'Opérateur' };
-
-export const Topbar = ({ title }) => {
-  const { keycloak } = useKeycloak();
-  const { username, roles } = useRole();
-
-  const displayRole = roles.find(r => ROLE_LABELS[r]) || roles[0] || '';
-
-  const handleLogout = () => keycloak.logout({ redirectUri: window.location.origin + '/' });
-
-  return (
-    <header className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-6 shrink-0">
-      <h1 className="text-slate-700 font-semibold text-base">{title}</h1>
-
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2 text-sm text-slate-600">
-          <MdPerson className="text-blue-500 text-xl" />
-          <span className="font-medium">{username}</span>
-          {displayRole && (
-            <span className="bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full">
-              {ROLE_LABELS[displayRole] || displayRole}
-            </span>
-          )}
-        </div>
-
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-red-600 transition-colors"
-        >
-          <MdLogout className="text-lg" />
-          Déconnexion
-        </button>
-      </div>
-    </header>
-  );
-};
+export const Topbar = ({ title }) => (
+  <header
+    className="h-14 flex items-center justify-between px-6 shrink-0"
+    style={{
+      background: 'rgba(255,255,255,0.98)',
+      borderBottom: '1px solid rgba(226,232,240,0.8)',
+      backdropFilter: 'blur(8px)',
+    }}
+  >
+    <div className="flex items-center gap-3">
+      <div
+        className="w-1 h-5 rounded-full"
+        style={{ background: 'linear-gradient(180deg, #3b82f6, #6366f1)' }}
+      />
+      <h1 className="text-slate-700 font-semibold text-[15px] tracking-wide">{title}</h1>
+    </div>
+  </header>
+);
