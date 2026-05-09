@@ -28,9 +28,8 @@ def _load(filename):
         return joblib.load(path)
     return None
 
-model      = _load('model.pkl')
-scaler     = _load('scaler.pkl')
-comparison = _load('comparison.pkl')
+model  = _load('model.pkl')
+scaler = _load('scaler.pkl')
 
 if model is None:
     logger.warning("model.pkl introuvable — exécutez train_model.py d'abord.")
@@ -42,10 +41,10 @@ CLASS_LABELS = {1: 'Rebut (Déchet)', 2: 'Acceptable', 3: 'Cible (Optimal)', 4: 
 CLASS_COLORS = {1: 'red',         2: 'orange',     3: 'green', 4: 'yellow'}
 
 RECOMMENDATIONS = {
-    1: "⚠️ Pièce non conforme — à rejeter. Vérifiez la température de fusion, la pression d'injection et le temps de cycle.",
-    2: "⚡ Qualité limite acceptable. Optimisez la pression d'injection et le volume pour atteindre la classe Cible.",
-    3: "✅ Qualité optimale. Maintenez les paramètres actuels.",
-    4: "ℹ️ Surqualité détectée (gaspillage de ressources). Réduisez légèrement la pression et la température.",
+    1: " Pièce non conforme — à rejeter. Vérifiez la température de fusion, la pression d'injection et le temps de cycle.",
+    2: " Qualité limite acceptable. Optimisez la pression d'injection et le volume pour atteindre la classe Cible.",
+    3: " Qualité optimale. Maintenez les paramètres actuels.",
+    4: "ℹ Surqualité détectée (gaspillage de ressources). Réduisez légèrement la pression et la température.",
 }
 
 FEATURE_ORDER = [
@@ -217,13 +216,3 @@ def feature_importance():
     )
     return {'features': [{'name': n, 'importance': round(float(v), 4)} for n, v in data]}
 
-@app.get('/model-comparison')
-def model_comparison():
-    if comparison is None:
-        return {'results': [], 'note': 'Exécutez train_model.py pour générer les comparaisons.'}
-    results = [
-        {'name': name, 'f1': round(v['f1'], 4), 'acc': round(v['acc'], 4), 'cv_f1': round(v['cv_f1'], 4)}
-        for name, v in comparison.items()
-    ]
-    results.sort(key=lambda x: x['cv_f1'], reverse=True)
-    return {'results': results}

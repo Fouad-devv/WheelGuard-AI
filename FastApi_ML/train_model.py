@@ -13,7 +13,6 @@ from sklearn.model_selection import train_test_split, cross_val_score, Stratifie
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import f1_score, accuracy_score, classification_report, confusion_matrix
@@ -70,10 +69,6 @@ def train():
         'KNN':                 KNeighborsClassifier(n_neighbors=5),
         'Decision Tree':       DecisionTreeClassifier(random_state=42),
         'Random Forest':       RandomForestClassifier(n_estimators=200, random_state=42, n_jobs=-1),
-        'XGBoost':             __import__('xgboost').XGBClassifier(
-                                   n_estimators=200, random_state=42,
-                                   eval_metric='mlogloss'),
-        'SVM':                 SVC(probability=True, random_state=42, kernel='rbf'),
     }
 
     cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
@@ -106,10 +101,6 @@ def train():
     joblib.dump(scaler,         os.path.join(out_dir, 'scaler.pkl'))
     print(f"\nModèle sauvegardé : {best_name} → model.pkl + scaler.pkl")
 
-    # Sauvegarde du résumé de comparaison
-    summary = {name: {'f1': r['f1'], 'acc': r['acc'], 'cv_f1': r['cv_f1']}
-               for name, r in results.items()}
-    joblib.dump(summary, os.path.join(out_dir, 'comparison.pkl'))
 
 if __name__ == '__main__':
     train()
