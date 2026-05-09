@@ -10,7 +10,7 @@ export const Topbar = ({ title }) => {
 
   const displayRole = roles.find(r => ROLE_LABELS[r]) || roles[0] || '';
 
-  const handleLogout = () => keycloak.logout({ redirectUri: window.location.origin });
+  const handleLogout = () => keycloak.logout({ redirectUri: window.location.origin + '/' });
 
   return (
     <header className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-6 shrink-0">
