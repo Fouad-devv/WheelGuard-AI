@@ -72,7 +72,7 @@ def train():
         'Random Forest':       RandomForestClassifier(n_estimators=200, random_state=42, n_jobs=-1),
         'XGBoost':             __import__('xgboost').XGBClassifier(
                                    n_estimators=200, random_state=42,
-                                   eval_metric='mlogloss', use_label_encoder=False),
+                                   eval_metric='mlogloss'),
         'SVM':                 SVC(probability=True, random_state=42, kernel='rbf'),
     }
 
