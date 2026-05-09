@@ -15,9 +15,9 @@ export const Layout = ({ title, children }) => {
         />
       )}
 
-      {/* Sidebar — fixed overlay on mobile, static on desktop */}
+      {/* Sidebar — fixed overlay on mobile, sticky viewport-height on desktop */}
       <div
-        className={`fixed top-0 left-0 h-full z-50 lg:static lg:h-auto lg:z-auto transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 h-full z-50 lg:sticky lg:top-0 lg:h-screen lg:z-auto transition-transform duration-300 ease-in-out ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >

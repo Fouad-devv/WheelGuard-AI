@@ -100,7 +100,7 @@ export const Sidebar = ({ onClose }) => {
 
   return (
     <aside
-      className={`relative flex flex-col h-full min-h-screen shrink-0 transition-[width] duration-300 ease-in-out ${
+      className={`relative flex flex-col h-full shrink-0 transition-[width] duration-300 ease-in-out ${
         isCollapsed ? 'w-[68px]' : 'w-64'
       }`}
       style={{ background: 'linear-gradient(180deg, #0c1023 0%, #0f172a 60%, #14103a 100%)' }}

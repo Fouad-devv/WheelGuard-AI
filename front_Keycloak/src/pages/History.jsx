@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import useAxiosPrivate from '../api/useAxiosPrivate';
-import { getHistory, getAllPredictions } from '../api/predictionApi';
-import { useRole } from '../hooks/useRole';
+import { getAllPredictions } from '../api/predictionApi';
 import { Layout } from '../components/Layout';
 import { MdDownload, MdClose, MdInfo, MdFilterList, MdChevronRight } from 'react-icons/md';
 import { Spinner } from '../components/Spinner';
@@ -47,8 +46,7 @@ const downloadCSV = (predictions) => {
 
 export const History = () => {
   const axios = useAxiosPrivate();
-  const { isManager } = useRole();
-  const [data, setData]       = useState({ predictions: [], total: 0 });
+const [data, setData]       = useState({ predictions: [], total: 0 });
   const [loading, setLoading] = useState(true);
   const [page, setPage]       = useState(1);
   const [filter, setFilter]   = useState({ className: '', from: '', to: '', username: '' });
@@ -60,8 +58,7 @@ export const History = () => {
     setLoading(true);
     try {
       const params = { page, limit, ...Object.fromEntries(Object.entries(filter).filter(([, v]) => v)) };
-      const fn = isManager ? getAllPredictions : getHistory;
-      const res = await fn(axios, params);
+      const res = await getAllPredictions(axios, params);
       setData(res.data);
     } catch {
       setData({ predictions: [], total: 0 });
@@ -70,7 +67,7 @@ export const History = () => {
     }
   };
 
-  useEffect(() => { fetchData(); }, [page, filter, isManager]);
+  useEffect(() => { fetchData(); }, [page, filter]);
 
   const totalPages = Math.ceil(data.total / limit);
   const setF = (key, val) => { setFilter(f => ({ ...f, [key]: val })); setPage(1); };
@@ -131,16 +128,14 @@ export const History = () => {
                 className="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            {isManager && (
-              <div>
-                <label className="block text-xs text-slate-500 mb-1">Opérateur</label>
-                <input
-                  type="text" value={filter.username} placeholder="Rechercher…"
-                  onChange={e => setF('username', e.target.value)}
-                  className="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            )}
+            <div>
+              <label className="block text-xs text-slate-500 mb-1">Opérateur</label>
+              <input
+                type="text" value={filter.username} placeholder="Rechercher…"
+                onChange={e => setF('username', e.target.value)}
+                className="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
             {Object.values(filter).some(Boolean) && (
               <button
                 onClick={() => { setFilter({ className: '', from: '', to: '', username: '' }); setPage(1); }}
@@ -173,9 +168,7 @@ export const History = () => {
               </span>
               <span className="text-xs text-slate-400 shrink-0">{fmtDateShort(p.timestamp)}</span>
             </div>
-            {isManager && (
-              <p className="text-sm font-medium text-slate-700 mb-2">{p.username}</p>
-            )}
+            <p className="text-sm font-medium text-slate-700 mb-2">{p.username}</p>
             <div className="grid grid-cols-3 gap-2 text-xs mb-3">
               {[
                 { label: 'Temp. Fusion', val: p.parameters?.meltTemperature?.toFixed(1) },
@@ -205,7 +198,7 @@ export const History = () => {
             <thead className="bg-slate-50 border-b border-slate-200">
               <tr>
                 <th className="text-left px-4 py-3 text-slate-500 font-medium">Date</th>
-                {isManager && <th className="text-left px-4 py-3 text-slate-500 font-medium">Opérateur</th>}
+                <th className="text-left px-4 py-3 text-slate-500 font-medium">Opérateur</th>
                 <th className="text-left px-4 py-3 text-slate-500 font-medium">Classe</th>
                 <th className="text-right px-4 py-3 text-slate-500 font-medium">Temp. Fusion</th>
                 <th className="text-right px-4 py-3 text-slate-500 font-medium">Temp. Moule</th>
@@ -221,7 +214,7 @@ export const History = () => {
               ) : data.predictions.map(p => (
                 <tr key={p._id} className="border-b border-slate-50 hover:bg-slate-50 transition-colors">
                   <td className="px-4 py-3 text-slate-600 whitespace-nowrap text-xs">{fmtDate(p.timestamp)}</td>
-                  {isManager && <td className="px-4 py-3 text-slate-700">{p.username}</td>}
+                  <td className="px-4 py-3 text-slate-700">{p.username}</td>
                   <td className="px-4 py-3">
                     <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${CLASS_BADGE[p.className] || 'bg-slate-100 text-slate-700'}`}>
                       {p.className}

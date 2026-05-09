@@ -11,7 +11,7 @@ const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 
 router.post('/predict',          requireRole('operator', 'manager', 'admin'), predict);
 router.post('/predict/batch',    requireRole('operator', 'manager', 'admin'), upload.single('file'), predictBatch);
 router.get('/predictions/history', requireRole('operator', 'manager', 'admin'), getHistory);
-router.get('/predictions/all',   requireRole('manager', 'admin'), getAllPredictions);
+router.get('/predictions/all',   requireRole('operator', 'manager', 'admin'), getAllPredictions);
 router.delete('/predictions/:id', requireRole('admin'), deletePrediction);
 
 export default router;
