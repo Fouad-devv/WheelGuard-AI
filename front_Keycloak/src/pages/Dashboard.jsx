@@ -110,14 +110,14 @@ export const Dashboard = () => {
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={classDistribution}
+                  data={classDistribution.filter(e => e.value > 0)}
                   cx="50%" cy="50%"
                   innerRadius="40%" outerRadius="65%"
                   dataKey="value"
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  label={({ name, percent }) => percent > 0.04 ? `${name} ${(percent * 100).toFixed(0)}%` : ''}
                   labelLine={false}
                 >
-                  {classDistribution.map(entry => (
+                  {classDistribution.filter(e => e.value > 0).map(entry => (
                     <Cell key={entry.name} fill={CLASS_COLORS[entry.name] || '#94a3b8'} />
                   ))}
                 </Pie>
