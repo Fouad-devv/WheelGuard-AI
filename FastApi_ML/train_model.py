@@ -60,9 +60,7 @@ def train():
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
 
-    X_train, X_test, y_train, y_test = train_test_split(
-        X_scaled, y, test_size=0.2, random_state=42, stratify=y
-    )
+    X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42, stratify=y)
 
     models = {
         'Logistic Regression': LogisticRegression(max_iter=1000, random_state=42),
@@ -80,8 +78,7 @@ def train():
         y_pred = model.predict(X_test)
         f1 = f1_score(y_test, y_pred, average='macro')
         acc = accuracy_score(y_test, y_pred)
-        cv_f1 = cross_val_score(model, X_scaled, y, cv=cv,
-                                scoring='f1_macro', n_jobs=-1).mean()
+        cv_f1 = cross_val_score(model, X_scaled, y, cv=cv, scoring='f1_macro', n_jobs=-1).mean()
         results[name] = {'model': model, 'f1': f1, 'acc': acc, 'cv_f1': cv_f1}
         print(f"  {name:<22} F1={f1:.4f}  Acc={acc:.4f}  CV-F1={cv_f1:.4f}")
 
