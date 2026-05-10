@@ -36,15 +36,15 @@ if model is None:
 
 # ── Constantes ───────────────────────────────────────────────────────────────
 
-CLASS_NAMES  = {1: 'Rebut',      2: 'Acceptable', 3: 'Cible',  4: 'Inefficient'}
-CLASS_LABELS = {1: 'Rebut (Déchet)', 2: 'Acceptable', 3: 'Cible (Optimal)', 4: 'Inefficient (Surqualité)'}
-CLASS_COLORS = {1: 'red',         2: 'orange',     3: 'green', 4: 'yellow'}
+CLASS_NAMES  = {1: 'Cible',       2: 'Acceptable', 3: 'Limite',              4: 'Rebut'}
+CLASS_LABELS = {1: 'Cible (Optimal)', 2: 'Acceptable', 3: 'Limite (Attention)', 4: 'Rebut (Non conforme)'}
+CLASS_COLORS = {1: 'green',        2: 'blue',       3: 'orange',              4: 'red'}
 
 RECOMMENDATIONS = {
-    1: " Pièce non conforme — à rejeter. Vérifiez la température de fusion, la pression d'injection et le temps de cycle.",
-    2: " Qualité limite acceptable. Optimisez la pression d'injection et le volume pour atteindre la classe Cible.",
-    3: " Qualité optimale. Maintenez les paramètres actuels.",
-    4: "ℹ Surqualité détectée (gaspillage de ressources). Réduisez légèrement la pression et la température.",
+    1: "✅ Qualité optimale. Maintenez les paramètres actuels.",
+    2: "⚠️ Qualité acceptable. Optimisez légèrement la pression d'injection pour atteindre la classe Cible.",
+    3: "⚠️ Qualité limite. Vérifiez le temps de cycle, la température de fusion et la pression d'injection.",
+    4: "❌ Pièce non conforme — à rejeter. Vérifiez la température de fusion, la pression d'injection et le temps de cycle.",
 }
 
 FEATURE_ORDER = [

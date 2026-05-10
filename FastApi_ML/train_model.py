@@ -89,7 +89,7 @@ def train():
     print(f"  Accuracy       : {best['acc']:.4f}")
     print("\nRapport de classification complet :")
     print(classification_report(y_test, best['model'].predict(X_test),
-                                target_names=['Rebut', 'Acceptable', 'Cible', 'Inefficient']))
+                                target_names=['Cible', 'Acceptable', 'Limite', 'Rebut']))
     print("Matrice de confusion :")
     print(confusion_matrix(y_test, best['model'].predict(X_test)))
 
