@@ -3,8 +3,8 @@ import axios from 'axios';
 
 const ML_URL = process.env.ML_SERVICE_URL || 'http://localhost:8000';
 
-const CLASS_NAMES = { 1: 'Rebut', 2: 'Acceptable', 3: 'Cible', 4: 'Inefficient' };
-const CLASS_COLORS = { 1: '#ef4444', 2: '#f97316', 3: '#22c55e', 4: '#eab308' };
+const CLASS_NAMES = { 1: 'Cible', 2: 'Acceptable', 3: 'Limite', 4: 'Rebut' };
+const CLASS_COLORS = { 1: '#22c55e', 2: '#3b82f6', 3: '#f97316', 4: '#ef4444' };
 
 function buildClassDistribution(predictions) {
   const counts = { 1: 0, 2: 0, 3: 0, 4: 0 };
@@ -27,10 +27,10 @@ function buildDailyTrend(predictions, days = 7) {
     result.push({
       date: dateStr,
       total: dayPreds.length,
-      rebut:       dayPreds.filter(p => p.prediction === 1).length,
+      cible:       dayPreds.filter(p => p.prediction === 1).length,
       acceptable:  dayPreds.filter(p => p.prediction === 2).length,
-      cible:       dayPreds.filter(p => p.prediction === 3).length,
-      inefficient: dayPreds.filter(p => p.prediction === 4).length,
+      limite:      dayPreds.filter(p => p.prediction === 3).length,
+      rebut:       dayPreds.filter(p => p.prediction === 4).length,
     });
   }
   return result;
@@ -51,7 +51,7 @@ export const getDashboard = async (req, res) => {
   ]);
 
   const rebutRate = week.length
-    ? Math.round((week.filter(p => p.prediction === 1).length / week.length) * 100)
+    ? Math.round((week.filter(p => p.prediction === 4).length / week.length) * 100)
     : 0;
 
   return res.json({
@@ -80,7 +80,7 @@ export const getGlobal = async (req, res) => {
   ]);
 
   const rebutRate = all.length
-    ? Math.round((all.filter(p => p.prediction === 1).length / all.length) * 100)
+    ? Math.round((all.filter(p => p.prediction === 4).length / all.length) * 100)
     : 0;
 
   // Operator leaderboard (predictions count per user this week)

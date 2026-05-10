@@ -6,10 +6,10 @@ import { MdDownload, MdClose, MdInfo, MdFilterList, MdChevronRight } from 'react
 import { Spinner } from '../components/Spinner';
 
 const CLASS_BADGE = {
-  Rebut:       'bg-red-100 text-red-700',
-  Acceptable:  'bg-orange-100 text-orange-700',
-  Cible:       'bg-green-100 text-green-700',
-  Inefficient: 'bg-yellow-100 text-yellow-700',
+  Cible:      'bg-green-100 text-green-700',
+  Acceptable: 'bg-blue-100 text-blue-700',
+  Limite:     'bg-orange-100 text-orange-700',
+  Rebut:      'bg-red-100 text-red-700',
 };
 
 const PARAMS_LABELS = {
@@ -107,7 +107,7 @@ const [data, setData]       = useState({ predictions: [], total: 0 });
                 className="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Toutes</option>
-                {['Rebut', 'Acceptable', 'Cible', 'Inefficient'].map(c => (
+                {['Cible', 'Acceptable', 'Limite', 'Rebut'].map(c => (
                   <option key={c} value={c}>{c}</option>
                 ))}
               </select>

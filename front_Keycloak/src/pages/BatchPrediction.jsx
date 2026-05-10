@@ -6,17 +6,17 @@ import { MdUploadFile, MdDownload, MdClose } from 'react-icons/md';
 import { Spinner } from '../components/Spinner';
 
 const CLASS_BADGE = {
-  Rebut:       'bg-red-100 text-red-700',
-  Acceptable:  'bg-orange-100 text-orange-700',
-  Cible:       'bg-green-100 text-green-700',
-  Inefficient: 'bg-yellow-100 text-yellow-700',
+  Cible:      'bg-green-100 text-green-700',
+  Acceptable: 'bg-blue-100 text-blue-700',
+  Limite:     'bg-orange-100 text-orange-700',
+  Rebut:      'bg-red-100 text-red-700',
 };
 
 const CLASS_STYLE = {
-  Rebut:       { color: '#ef4444', bg: '#fef2f2' },
-  Acceptable:  { color: '#f97316', bg: '#fff7ed' },
-  Cible:       { color: '#22c55e', bg: '#f0fdf4' },
-  Inefficient: { color: '#eab308', bg: '#fefce8' },
+  Cible:      { color: '#22c55e', bg: '#f0fdf4' },
+  Acceptable: { color: '#3b82f6', bg: '#eff6ff' },
+  Limite:     { color: '#f97316', bg: '#fff7ed' },
+  Rebut:      { color: '#ef4444', bg: '#fef2f2' },
 };
 
 export const BatchPrediction = () => {
@@ -49,7 +49,7 @@ export const BatchPrediction = () => {
 
   const downloadResults = () => {
     if (!result) return;
-    const header = ['Ligne', 'Classe', 'Rebut%', 'Acceptable%', 'Cible%', 'Inefficient%'];
+    const header = ['Ligne', 'Classe', 'Cible%', 'Acceptable%', 'Limite%', 'Rebut%'];
     const rows = result.results.map(r => [
       r.row, r.className,
       Math.round((r.probabilities?.['1'] || 0) * 100),
@@ -147,7 +147,7 @@ export const BatchPrediction = () => {
         <>
           {/* Summary cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
-            {['Rebut', 'Acceptable', 'Cible', 'Inefficient'].map(cls => {
+            {['Cible', 'Acceptable', 'Limite', 'Rebut'].map(cls => {
               const s = CLASS_STYLE[cls];
               const count = summary[cls] || 0;
               const pct = result.total > 0 ? Math.round((count / result.total) * 100) : 0;
@@ -181,10 +181,10 @@ export const BatchPrediction = () => {
                   </span>
                   <div className="grid grid-cols-4 gap-1 flex-1 text-[10px]">
                     {[
-                      { label: 'R', val: r.probabilities?.['1'] },
+                      { label: 'C', val: r.probabilities?.['1'] },
                       { label: 'A', val: r.probabilities?.['2'] },
-                      { label: 'C', val: r.probabilities?.['3'] },
-                      { label: 'I', val: r.probabilities?.['4'] },
+                      { label: 'L', val: r.probabilities?.['3'] },
+                      { label: 'R', val: r.probabilities?.['4'] },
                     ].map(({ label, val }) => (
                       <div key={label} className="text-center">
                         <span className="text-slate-400">{label}: </span>
@@ -203,10 +203,10 @@ export const BatchPrediction = () => {
                   <tr>
                     <th className="text-left px-4 py-3 text-slate-500 font-medium">Ligne</th>
                     <th className="text-left px-4 py-3 text-slate-500 font-medium">Classe</th>
-                    <th className="text-right px-4 py-3 text-slate-500 font-medium">Rebut</th>
-                    <th className="text-right px-4 py-3 text-slate-500 font-medium">Acceptable</th>
                     <th className="text-right px-4 py-3 text-slate-500 font-medium">Cible</th>
-                    <th className="text-right px-4 py-3 text-slate-500 font-medium">Inefficient</th>
+                    <th className="text-right px-4 py-3 text-slate-500 font-medium">Acceptable</th>
+                    <th className="text-right px-4 py-3 text-slate-500 font-medium">Limite</th>
+                    <th className="text-right px-4 py-3 text-slate-500 font-medium">Rebut</th>
                   </tr>
                 </thead>
                 <tbody>

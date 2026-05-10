@@ -14,7 +14,7 @@ import {
 import { Spinner } from '../components/Spinner';
 
 const CLASS_COLORS = {
-  Rebut: '#ef4444', Acceptable: '#f97316', Cible: '#22c55e', Inefficient: '#eab308',
+  Cible: '#22c55e', Acceptable: '#3b82f6', Limite: '#f97316', Rebut: '#ef4444',
 };
 
 const KpiCard = ({ icon: Icon, label, value, color = 'blue' }) => {
@@ -141,10 +141,10 @@ export const Dashboard = () => {
                 <YAxis tick={{ fontSize: 10 }} />
                 <Tooltip />
                 <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} />
-                <Bar dataKey="rebut"       fill="#ef4444" name="Rebut"       stackId="a" />
-                <Bar dataKey="acceptable"  fill="#f97316" name="Acceptable"  stackId="a" />
-                <Bar dataKey="cible"       fill="#22c55e" name="Cible"       stackId="a" />
-                <Bar dataKey="inefficient" fill="#eab308" name="Inefficient" stackId="a" radius={[3, 3, 0, 0]} />
+                <Bar dataKey="cible"      fill="#22c55e" name="Cible"      stackId="a" />
+                <Bar dataKey="acceptable" fill="#3b82f6" name="Acceptable" stackId="a" />
+                <Bar dataKey="limite"     fill="#f97316" name="Limite"     stackId="a" />
+                <Bar dataKey="rebut"      fill="#ef4444" name="Rebut"      stackId="a" radius={[3, 3, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
