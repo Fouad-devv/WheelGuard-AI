@@ -41,10 +41,10 @@ CLASS_LABELS = {1: 'Cible (Optimal)', 2: 'Acceptable', 3: 'Limite (Attention)', 
 CLASS_COLORS = {1: 'green',        2: 'blue',       3: 'orange',              4: 'red'}
 
 RECOMMENDATIONS = {
-    1: "✅ Qualité optimale. Maintenez les paramètres actuels.",
-    2: "⚠️ Qualité acceptable. Optimisez légèrement la pression d'injection pour atteindre la classe Cible.",
-    3: "⚠️ Qualité limite. Vérifiez le temps de cycle, la température de fusion et la pression d'injection.",
-    4: "❌ Pièce non conforme — à rejeter. Vérifiez la température de fusion, la pression d'injection et le temps de cycle.",
+    1: " Qualité optimale. Maintenez les paramètres actuels.",
+    2: " Qualité acceptable. Optimisez légèrement la pression d'injection pour atteindre la classe Cible.",
+    3: " Qualité limite. Vérifiez le temps de cycle, la température de fusion et la pression d'injection.",
+    4: " Pièce non conforme — à rejeter. Vérifiez la température de fusion, la pression d'injection et le temps de cycle.",
 }
 
 FEATURE_ORDER = [
