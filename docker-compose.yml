@@ -1,23 +1,5 @@
 services:
 
-  mongodb:
-    image: mongo:7.0
-    container_name: lumiquality-mongodb
-    restart: unless-stopped
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
-    environment:
-      MONGO_INITDB_DATABASE: prediction
-    networks:
-      - lumiquality-network
-    healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   keycloak:
     image: quay.io/keycloak/keycloak:26.1.1
     container_name: lumiquality-keycloak
@@ -68,7 +50,7 @@ services:
       - "5000:5000"
     environment:
       PORT: "5000"
-      DATABASE_URI: mongodb://mongodb:27017/prediction
+      DATABASE_URI: mongodb+srv://Auth:Auth@cluster0.stlilvv.mongodb.net/prediction?retryWrites=true&w=majority
       CLIENT_URL: http://localhost:3000
       SESSION_SECRET: lumiqualityai-secret-2025
       ML_SERVICE_URL: http://fastapi-ml:8000
@@ -78,8 +60,6 @@ services:
       KEYCLOAK_ADMIN_USER: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     depends_on:
-      mongodb:
-        condition: service_healthy
       keycloak:
         condition: service_healthy
       fastapi-ml:
@@ -109,6 +89,3 @@ services:
 networks:
   lumiquality-network:
     driver: bridge
-
-volumes:
-  mongodb_data:
