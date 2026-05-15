@@ -1,7 +1,7 @@
 services:
 
   keycloak:
-    image: quay.io/keycloak/keycloak:26.1.1
+    image: quay.io/keycloak/keycloak:26.6.1
     container_name: lumiquality-keycloak
     restart: unless-stopped
     command: start-dev --import-realm
