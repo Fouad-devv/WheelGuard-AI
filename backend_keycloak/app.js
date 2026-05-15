@@ -7,8 +7,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import morgan from 'morgan';
 import { attachUserId } from './Middleware/attachUserId.js';
-import session from 'express-session';
-import { keycloak, memoryStore } from './config/keycloak.js';
+import { keycloakAuth } from './Middleware/keycloakAuth.js';
 
 // Routes
 import homeRoute       from './routers/homeRoute.js';
@@ -28,17 +27,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan('dev'));
 
-// Session for Keycloak
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'lumiqualityai-secret',
-  resave: false,
-  saveUninitialized: true,
-  store: memoryStore,
-}));
-app.use(keycloak.middleware());
-
 // All routes below require a valid Keycloak Bearer token
-app.use(keycloak.protect(), attachUserId);
+app.use(keycloakAuth, attachUserId);
 
 app.use('/api', predictionRoute);
 app.use('/api', statsRoute);

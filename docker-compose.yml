@@ -15,15 +15,9 @@ services:
       - "8081:8080"
     volumes:
       - ./keycloak-realm-export.json:/opt/keycloak/data/import/IA_Indus-realm.json
+      - ./keycloak-theme/rag-theme:/opt/keycloak/themes/rag-theme
     networks:
       - lumiquality-network
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8080/health/ready || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 10
-      start_period: 60s
-
   fastapi-ml:
     build:
       context: ./FastApi_ML
@@ -35,7 +29,7 @@ services:
     networks:
       - lumiquality-network
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -51,17 +45,17 @@ services:
     environment:
       PORT: "5000"
       DATABASE_URI: mongodb+srv://Auth:Auth@cluster0.stlilvv.mongodb.net/prediction?retryWrites=true&w=majority
-      CLIENT_URL: http://localhost:3000
+      CLIENT_URL: http://localhost:5173
       SESSION_SECRET: lumiqualityai-secret-2025
       ML_SERVICE_URL: http://fastapi-ml:8000
       KEYCLOAK_SERVER_URL: http://keycloak:8080/
       KEYCLOAK_REALM: IA_Indus
       KEYCLOAK_CLIENT_ID: IA_indus
       KEYCLOAK_ADMIN_USER: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin1234
     depends_on:
       keycloak:
-        condition: service_healthy
+        condition: service_started
       fastapi-ml:
         condition: service_healthy
     networks:
@@ -79,7 +73,7 @@ services:
     container_name: lumiquality-frontend
     restart: unless-stopped
     ports:
-      - "3000:80"
+      - "5173:80"
     depends_on:
       - backend
       - keycloak

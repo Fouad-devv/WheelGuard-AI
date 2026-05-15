@@ -622,11 +622,13 @@
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
         "http://localhost:5173/*",
-        "http://localhost:3000/*"
+        "http://localhost:3000/*",
+        "http://host.docker.internal:3000/*",
+        "http://host.docker.internal:5173/*"
       ],
       "webOrigins": [
         "+",
-        "http://localhost:3000"
+        "http://localhost:5173"
       ],
       "notBefore": 0,
       "bearerOnly": false,
