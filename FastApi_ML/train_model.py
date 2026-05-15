@@ -1,8 +1,3 @@
-"""
-Script d'entraînement du modèle LumiQuality AI.
-Exécuter une fois depuis le dossier FastApi_ML :  python train_model.py
-Génère model.pkl et scaler.pkl dans le même dossier.
-"""
 
 import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
@@ -54,6 +49,8 @@ def load_data():
     print(f"Distribution des classes:\n{y.value_counts().sort_index()}")
     return X, y
 
+
+
 def train():
     X, y = load_data()
 
@@ -97,6 +94,8 @@ def train():
     joblib.dump(best['model'], os.path.join(out_dir, 'model.pkl'))
     joblib.dump(scaler,         os.path.join(out_dir, 'scaler.pkl'))
     print(f"\nModèle sauvegardé : {best_name} → model.pkl + scaler.pkl")
+
+
 
 
 if __name__ == '__main__':

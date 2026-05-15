@@ -1,0 +1,112 @@
+services:
+
+  mongodb:
+    image: mongo:7.0
+    container_name: lumiquality-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: prediction
+    networks:
+      - lumiquality-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.1.1
+    container_name: lumiquality-keycloak
+    restart: unless-stopped
+    command: start-dev
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_HTTP_PORT: 8080
+      KC_HOSTNAME_STRICT: "false"
+      KC_HTTP_ENABLED: "true"
+    ports:
+      - "8081:8080"
+    networks:
+      - lumiquality-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/health/ready || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+
+  fastapi-ml:
+    build:
+      context: ./FastApi_ML
+      dockerfile: Dockerfile
+    container_name: lumiquality-fastapi-ml
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    networks:
+      - lumiquality-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend_keycloak
+      dockerfile: Dockerfile
+    container_name: lumiquality-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      PORT: "5000"
+      DATABASE_URI: mongodb://mongodb:27017/prediction
+      CLIENT_URL: http://localhost:3000
+      SESSION_SECRET: lumiqualityai-secret-2025
+      ML_SERVICE_URL: http://fastapi-ml:8000
+      KEYCLOAK_SERVER_URL: http://keycloak:8080/
+      KEYCLOAK_REALM: IA_Indus
+      KEYCLOAK_CLIENT_ID: IA_indus
+      KEYCLOAK_ADMIN_USER: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+      fastapi-ml:
+        condition: service_healthy
+    networks:
+      - lumiquality-network
+
+  frontend:
+    build:
+      context: ./front_Keycloak
+      dockerfile: Dockerfile
+      args:
+        VITE_KEYCLOAK_URL: http://localhost:8081
+        VITE_KEYCLOAK_REALM: IA_Indus
+        VITE_KEYCLOAK_CLIENT_ID: IA_indus
+        VITE_API_URL: http://localhost:5000
+    container_name: lumiquality-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+      - keycloak
+    networks:
+      - lumiquality-network
+
+networks:
+  lumiquality-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
