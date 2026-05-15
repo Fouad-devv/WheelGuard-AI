@@ -133,10 +133,10 @@ const GROUPS = [
 const FIELDS = GROUPS.flatMap(g => g.fields);
 
 const CLASS_META = {
-  Rebut:       { color: '#ef4444', bg: '#fef2f2', border: '#fca5a5', icon: MdError,       text: '#b91c1c' },
-  Acceptable:  { color: '#f97316', bg: '#fff7ed', border: '#fdba74', icon: MdWarning,     text: '#c2410c' },
-  Cible:       { color: '#22c55e', bg: '#f0fdf4', border: '#86efac', icon: MdCheckCircle, text: '#15803d' },
-  Inefficient: { color: '#eab308', bg: '#fefce8', border: '#fde047', icon: MdInfo,        text: '#a16207' },
+  Rebut:      { color: '#ef4444', bg: '#fef2f2', border: '#fca5a5', icon: MdError,       text: '#b91c1c' },
+  Acceptable: { color: '#f97316', bg: '#fff7ed', border: '#fdba74', icon: MdWarning,     text: '#c2410c' },
+  Cible:      { color: '#22c55e', bg: '#f0fdf4', border: '#86efac', icon: MdCheckCircle, text: '#15803d' },
+  Limite:     { color: '#eab308', bg: '#fefce8', border: '#fde047', icon: MdInfo,        text: '#a16207' },
 };
 
 const initForm = () => Object.fromEntries(FIELDS.map(f => [f.key, '']));
@@ -206,9 +206,9 @@ export const Prediction = () => {
 
   const probData = result
     ? Object.entries(result.probabilities).map(([k, v]) => ({
-        name: ['', 'Rebut', 'Acceptable', 'Cible', 'Inefficient'][Number(k)],
+        name:  ['', 'Cible', 'Acceptable', 'Limite', 'Rebut'][Number(k)],
         value: Math.round(v * 100),
-        color: ['', '#ef4444', '#f97316', '#22c55e', '#eab308'][Number(k)],
+        color: ['', '#22c55e', '#f97316', '#eab308', '#ef4444'][Number(k)],
       }))
     : [];
 
