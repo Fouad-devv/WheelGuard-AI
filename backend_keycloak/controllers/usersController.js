@@ -1,7 +1,7 @@
 import axios from 'axios';
 import AuditLog from '../models/AuditLog.js';
 
-const KC_URL   = process.env.KEYCLOAK_SERVER_URL || 'http://localhost:8081';
+const KC_URL   = (process.env.KEYCLOAK_SERVER_URL || 'http://localhost:8081').replace(/\/$/, '');
 const KC_REALM = process.env.KEYCLOAK_REALM      || 'IA_Indus';
 const ADMIN_USER = process.env.KEYCLOAK_ADMIN_USER || 'admin';
 const ADMIN_PASS = process.env.KEYCLOAK_ADMIN_PASSWORD || 'admin';
